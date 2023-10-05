@@ -5,7 +5,11 @@ import { IconBrandMantine, IconUser, IconUserBolt, IconUsers } from '@tabler/ico
 import Dashboard from "./dashboard";
 // import API_URL from "../"
 
-
+interface Resident {
+  name: string;
+  house: string;
+  type: string;
+}
 
 const IndexPage: React.FC = () => {
   const [residents, setResidents] = useState(null)
