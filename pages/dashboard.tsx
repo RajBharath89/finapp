@@ -8,6 +8,7 @@ export default function Dashboard() {
     <Card m={20} bg="#A31D14" shadow="sm" padding="lg" radius="md" withBorder>
         <Text ta="center" c="white" size="lg" fw={400}> <IconCash size="60" stroke={1}/><br/>Account Balance</Text>
         <Title ta="center" c="white" order={1}>₹ 620.00</Title>
+        <Group justify="center"><Button mt={15} variant="outline" color="yellow" size="xs" radius="xl">View Transactions</Button></Group>
     </Card>    
     </>
   );
