@@ -47,14 +47,14 @@ const IndexPage: React.FC = () => {
       <Avatar variant="filled" radius="xl" color="#FA9014"><IconUsers/></Avatar>
       </Popover.Target>
       <Popover.Dropdown>
-      {residents?.rows?.map((ival:any) => (
+      {/* {residents?.rows?.map((ival:any) => (
         <Group justify="space-between" mb={5}>
         <Avatar variant="filled" radius="xl" color="#FA9014">{ival.house}</Avatar>
         <Text>{ival.name}</Text>
         <Badge color="#FA9014" variant="light">{ival.type}</Badge>
       </Group>
       // <div className="user">{ival.name}</div>
-      ))}
+      ))} */}
           
       </Popover.Dropdown>
     </Popover>
