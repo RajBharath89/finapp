@@ -118,7 +118,7 @@ export default function Dashboard() {
         <Divider mb={10} mt={10} />
         <Stack>
         <Grid align="center" justify="space-around">
-          <Grid.Col span={8}>
+          <Grid.Col span={9}>
             <Group justify="flex-start">
               <Avatar variant="filled" radius="xl" color="#FA9014">
                 F1
@@ -126,9 +126,8 @@ export default function Dashboard() {
               <Text>Raj Bharath</Text>
             </Group>
           </Grid.Col>
-          <Grid.Col span={4}>
+          <Grid.Col span={3}>
             <Group>
-              <Text>₹ 0.00</Text>
               <Badge color="green" variant="filled">
                 paid
               </Badge>
@@ -136,7 +135,7 @@ export default function Dashboard() {
           </Grid.Col>
         </Grid>
         <Grid align="center" justify="space-around">
-          <Grid.Col span={8}>
+          <Grid.Col span={9}>
             <Group justify="flex-start">
               <Avatar variant="filled" radius="xl" color="#FA9014">
                 F2
@@ -144,17 +143,16 @@ export default function Dashboard() {
               <Text>Rajesh Pandey</Text>
             </Group>
           </Grid.Col>
-          <Grid.Col span={4}>
+          <Grid.Col span={3}>
             <Group>
-              <Text>₹ 400</Text>
               <Badge color="red" variant="filled">
-                PEND
+                pending
               </Badge>
             </Group>
           </Grid.Col>
         </Grid>
         <Grid align="center" justify="space-around">
-          <Grid.Col span={8}>
+          <Grid.Col span={9}>
             <Group justify="flex-start">
               <Avatar variant="filled" radius="xl" color="#FA9014">
                 F1
@@ -162,9 +160,8 @@ export default function Dashboard() {
               <Text>Boopalan</Text>
             </Group>
           </Grid.Col>
-          <Grid.Col span={4}>
+          <Grid.Col span={3}>
             <Group>
-              <Text>₹ 0.00</Text>
               <Badge color="green" variant="filled">
                 paid
               </Badge>
@@ -172,7 +169,7 @@ export default function Dashboard() {
           </Grid.Col>
         </Grid>
         <Grid align="center" justify="space-around">
-          <Grid.Col span={8}>
+          <Grid.Col span={9}>
             <Group justify="flex-start">
               <Avatar variant="filled" radius="xl" color="#FA9014">
                 S1
@@ -180,9 +177,8 @@ export default function Dashboard() {
               <Text>Pramod Kumar</Text>
             </Group>
           </Grid.Col>
-          <Grid.Col span={4}>
+          <Grid.Col span={3}>
             <Group>
-              <Text>₹ 0.00</Text>
               <Badge color="green" variant="filled">
                 paid
               </Badge>
@@ -190,7 +186,7 @@ export default function Dashboard() {
           </Grid.Col>
         </Grid>
         <Grid align="center" justify="space-around">
-          <Grid.Col span={8}>
+          <Grid.Col span={9}>
             <Group justify="flex-start">
               <Avatar variant="filled" radius="xl" color="#FA9014">
                 S2
@@ -198,17 +194,16 @@ export default function Dashboard() {
               <Text>Ravikumar</Text>
             </Group>
           </Grid.Col>
-          <Grid.Col span={4}>
+          <Grid.Col span={3}>
             <Group>
-              <Text>₹ 400</Text>
               <Badge color="red" variant="filled">
-                pend
+                pending
               </Badge>
             </Group>
           </Grid.Col>
         </Grid>
         <Grid align="center" justify="space-around">
-          <Grid.Col span={8}>
+          <Grid.Col span={9}>
             <Group justify="flex-start">
               <Avatar variant="filled" radius="xl" color="#FA9014">
                 S3
@@ -216,9 +211,8 @@ export default function Dashboard() {
               <Text>Diana</Text>
             </Group>
           </Grid.Col>
-          <Grid.Col span={4}>
+          <Grid.Col span={3}>
             <Group>
-              <Text>₹ 0.00</Text>
               <Badge color="green" variant="filled">
                 paid
               </Badge>
