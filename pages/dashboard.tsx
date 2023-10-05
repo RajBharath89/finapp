@@ -74,9 +74,9 @@ export default function Dashboard() {
             </Group>
           </Grid.Col>
           <Grid.Col span={6}>
-            <Text ta="right">
+            {/* <Text ta="right"> */}
               <Title order={5}>₹ 2400.00</Title>
-            </Text>
+            {/* </Text> */}
           </Grid.Col>
         </Grid>
       </Card>
@@ -104,9 +104,9 @@ export default function Dashboard() {
             </Group>
           </Grid.Col>
           <Grid.Col span={6}>
-            <Text ta="right">
+            {/* <Text ta="right"> */}
               <Title order={5}>₹ 2230.00</Title>
-            </Text>
+            {/* </Text> */}
           </Grid.Col>
         </Grid>
       </Card>
