@@ -75,13 +75,13 @@ export default function Dashboard() {
                 />
               </ActionIcon>
               <Text ta="left" c="#A31D14" size="lg" fw={500}>
-                Total Income
+                Income
               </Text>
             </Group>
           </Grid.Col>
           <Grid.Col span={6}>
             {/* <Text ta="right"> */}
-              <Title order={5} ta="right">₹ 2400.00</Title>
+              <Title order={4} ta="right">₹ 2400.00</Title>
             {/* </Text> */}
           </Grid.Col>
         </Grid>
@@ -105,13 +105,13 @@ export default function Dashboard() {
                 />
               </ActionIcon>
               <Text ta="left" c="#A31D14" size="lg" fw={500}>
-                Total Expenses
+                Expenses
               </Text>
             </Group>
           </Grid.Col>
           <Grid.Col span={6}>
             {/* <Text ta="right"> */}
-              <Title order={5} ta="right">₹ 2230.00</Title>
+              <Title order={4} ta="right">₹ 2230.00</Title>
             {/* </Text> */}
           </Grid.Col>
         </Grid>
@@ -124,7 +124,7 @@ export default function Dashboard() {
         <Divider mb={10} mt={10} />
         <Stack>
         <Grid align="center" justify="space-around">
-          <Grid.Col span={8}>
+          <Grid.Col span={7}>
             <Group justify="flex-start">
               <Avatar variant="filled" radius="xl" color="green">
                 F1
@@ -132,8 +132,8 @@ export default function Dashboard() {
               <Text>Raj Bharath</Text>
             </Group>
           </Grid.Col>
-          <Grid.Col span={4}>
-            <Group>
+          <Grid.Col span={5}>
+            <Group justify="flex-end">
               <Badge color="green" variant="filled">
                 paid
               </Badge>
@@ -141,7 +141,7 @@ export default function Dashboard() {
           </Grid.Col>
         </Grid>
         <Grid align="center" justify="space-around">
-          <Grid.Col span={8}>
+          <Grid.Col span={7}>
             <Group justify="flex-start">
               <Avatar variant="filled" radius="xl" color="red">
                 F2
@@ -149,7 +149,7 @@ export default function Dashboard() {
               <Text>Rajesh Pandey</Text>
             </Group>
           </Grid.Col>
-          <Grid.Col span={4} >
+          <Grid.Col span={5} >
             <Group justify="flex-end">
               <Badge color="red" variant="filled">
                 pending
@@ -161,7 +161,7 @@ export default function Dashboard() {
           </Grid.Col>
         </Grid>
         <Grid align="center" justify="space-around">
-          <Grid.Col span={8}>
+          <Grid.Col span={7}>
             <Group justify="flex-start">
               <Avatar variant="filled" radius="xl" color="green">
                 F1
@@ -169,8 +169,8 @@ export default function Dashboard() {
               <Text>Boopalan</Text>
             </Group>
           </Grid.Col>
-          <Grid.Col span={4}>
-            <Group>
+          <Grid.Col span={5}>
+            <Group justify="flex-end">
               <Badge color="green" variant="filled">
                 paid
               </Badge>
@@ -178,7 +178,7 @@ export default function Dashboard() {
           </Grid.Col>
         </Grid>
         <Grid align="center" justify="space-around">
-          <Grid.Col span={8}>
+          <Grid.Col span={7}>
             <Group justify="flex-start">
               <Avatar variant="filled" radius="xl" color="green">
                 S1
@@ -186,8 +186,8 @@ export default function Dashboard() {
               <Text>Pramod Kumar</Text>
             </Group>
           </Grid.Col>
-          <Grid.Col span={4}>
-            <Group>
+          <Grid.Col span={5}>
+            <Group justify="flex-end">
               <Badge color="green" variant="filled">
                 paid
               </Badge>
@@ -195,7 +195,7 @@ export default function Dashboard() {
           </Grid.Col>
         </Grid>
         <Grid align="center" justify="space-around">
-          <Grid.Col span={8}>
+          <Grid.Col span={7}>
             <Group justify="flex-start">
               <Avatar variant="filled" radius="xl" color="red">
                 S2
@@ -203,7 +203,7 @@ export default function Dashboard() {
               <Text>Ravikumar</Text>
             </Group>
           </Grid.Col>
-          <Grid.Col span={4} >
+          <Grid.Col span={5} >
             <Group justify="flex-end">
               <Badge color="red" variant="filled">
                 pending
@@ -215,7 +215,7 @@ export default function Dashboard() {
           </Grid.Col>
         </Grid>
         <Grid align="center" justify="space-around">
-          <Grid.Col span={8}>
+          <Grid.Col span={7}>
             <Group justify="flex-start">
               <Avatar variant="filled" radius="xl" color="green">
                 S3
@@ -223,8 +223,8 @@ export default function Dashboard() {
               <Text>Diana</Text>
             </Group>
           </Grid.Col>
-          <Grid.Col span={4}>
-            <Group>
+          <Grid.Col span={5}>
+            <Group justify="flex-end">
               <Badge color="green" variant="filled">
                 paid
               </Badge>
@@ -233,6 +233,7 @@ export default function Dashboard() {
         </Grid>
         </Stack>
       </Card>
+      <Text c="dimmed" fz={13} ta="center" mt={10}>Developed by Pixels2Bots</Text>
     </>
   );
 }
