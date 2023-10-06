@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ActionIcon, Avatar, Badge, Button, Divider, Group, Popover, Stack, Text } from "@mantine/core";
+import { ActionIcon, Avatar, Badge, Button, Center, Divider, Group, Popover, Stack, Text } from "@mantine/core";
 import { Image } from '@mantine/core';
 import { IconBrandMantine, IconUser, IconUserBolt, IconUsers } from '@tabler/icons-react';
 import Dashboard from "./dashboard";
@@ -51,10 +51,10 @@ const IndexPage: React.FC = () => {
           </Popover.Target>
           <Popover.Dropdown>
             {residentsData.map((ival: Resident) => (
-              <Group justify="space-between" mb={5} key={ival.name}>
-                <Avatar variant="filled" radius="xl" color="#FA9014">{ival.house}</Avatar>
-                <Text>{ival.name}</Text>
-                <Badge color="#FA9014" variant="light">{ival.type}</Badge>
+              <Group justify="flex-start" mb={15} key={ival.name}>
+                <Avatar size="28" variant="filled" radius="xl" color="#FA9014">{ival.house}</Avatar>
+                <Text ta="left">{ival.name}</Text>
+                <Badge ta="right" color="#A31D14" variant="light">{ival.type}</Badge>
               </Group>
             ))}
           </Popover.Dropdown>

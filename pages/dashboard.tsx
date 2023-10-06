@@ -20,12 +20,17 @@ import {
   IconBrandMantine,
   IconCash,
   IconCashBanknote,
+  IconEye,
   IconUser,
   IconUserBolt,
   IconUsers,
 } from "@tabler/icons-react";
 
+import { useRouter } from 'next/router'
+
 export default function Dashboard() {
+  const router = useRouter()
+
   return (
     <>
       <Card m={20} bg="#A31D14" shadow="sm" padding="lg" radius="md" withBorder>
@@ -45,6 +50,7 @@ export default function Dashboard() {
             color="yellow"
             size="xs"
             radius="xl"
+            onClick={() => router.push('./transactions')}
           >
             View Transactions
           </Button>
@@ -69,13 +75,13 @@ export default function Dashboard() {
                 />
               </ActionIcon>
               <Text ta="left" c="#A31D14" size="lg" fw={500}>
-                Income
+                Total Income
               </Text>
             </Group>
           </Grid.Col>
           <Grid.Col span={6}>
             {/* <Text ta="right"> */}
-              <Title order={5}>₹ 2400.00</Title>
+              <Title order={5} ta="right">₹ 2400.00</Title>
             {/* </Text> */}
           </Grid.Col>
         </Grid>
@@ -99,13 +105,13 @@ export default function Dashboard() {
                 />
               </ActionIcon>
               <Text ta="left" c="#A31D14" size="lg" fw={500}>
-                Expenses
+                Total Expenses
               </Text>
             </Group>
           </Grid.Col>
           <Grid.Col span={6}>
             {/* <Text ta="right"> */}
-              <Title order={5}>₹ 2230.00</Title>
+              <Title order={5} ta="right">₹ 2230.00</Title>
             {/* </Text> */}
           </Grid.Col>
         </Grid>
@@ -118,15 +124,15 @@ export default function Dashboard() {
         <Divider mb={10} mt={10} />
         <Stack>
         <Grid align="center" justify="space-around">
-          <Grid.Col span={9}>
+          <Grid.Col span={8}>
             <Group justify="flex-start">
-              <Avatar variant="filled" radius="xl" color="#FA9014">
+              <Avatar variant="filled" radius="xl" color="green">
                 F1
               </Avatar>
               <Text>Raj Bharath</Text>
             </Group>
           </Grid.Col>
-          <Grid.Col span={3}>
+          <Grid.Col span={4}>
             <Group>
               <Badge color="green" variant="filled">
                 paid
@@ -135,32 +141,35 @@ export default function Dashboard() {
           </Grid.Col>
         </Grid>
         <Grid align="center" justify="space-around">
-          <Grid.Col span={9}>
+          <Grid.Col span={8}>
             <Group justify="flex-start">
-              <Avatar variant="filled" radius="xl" color="#FA9014">
+              <Avatar variant="filled" radius="xl" color="red">
                 F2
               </Avatar>
               <Text>Rajesh Pandey</Text>
             </Group>
           </Grid.Col>
-          <Grid.Col span={3}>
-            <Group>
+          <Grid.Col span={4} >
+            <Group justify="flex-end">
               <Badge color="red" variant="filled">
                 pending
               </Badge>
+              <ActionIcon variant="light" color="red" size="sm" radius="xl" >
+                <IconEye />
+              </ActionIcon>
             </Group>
           </Grid.Col>
         </Grid>
         <Grid align="center" justify="space-around">
-          <Grid.Col span={9}>
+          <Grid.Col span={8}>
             <Group justify="flex-start">
-              <Avatar variant="filled" radius="xl" color="#FA9014">
+              <Avatar variant="filled" radius="xl" color="green">
                 F1
               </Avatar>
               <Text>Boopalan</Text>
             </Group>
           </Grid.Col>
-          <Grid.Col span={3}>
+          <Grid.Col span={4}>
             <Group>
               <Badge color="green" variant="filled">
                 paid
@@ -169,15 +178,15 @@ export default function Dashboard() {
           </Grid.Col>
         </Grid>
         <Grid align="center" justify="space-around">
-          <Grid.Col span={9}>
+          <Grid.Col span={8}>
             <Group justify="flex-start">
-              <Avatar variant="filled" radius="xl" color="#FA9014">
+              <Avatar variant="filled" radius="xl" color="green">
                 S1
               </Avatar>
               <Text>Pramod Kumar</Text>
             </Group>
           </Grid.Col>
-          <Grid.Col span={3}>
+          <Grid.Col span={4}>
             <Group>
               <Badge color="green" variant="filled">
                 paid
@@ -186,32 +195,35 @@ export default function Dashboard() {
           </Grid.Col>
         </Grid>
         <Grid align="center" justify="space-around">
-          <Grid.Col span={9}>
+          <Grid.Col span={8}>
             <Group justify="flex-start">
-              <Avatar variant="filled" radius="xl" color="#FA9014">
+              <Avatar variant="filled" radius="xl" color="red">
                 S2
               </Avatar>
               <Text>Ravikumar</Text>
             </Group>
           </Grid.Col>
-          <Grid.Col span={3}>
-            <Group>
+          <Grid.Col span={4} >
+            <Group justify="flex-end">
               <Badge color="red" variant="filled">
                 pending
               </Badge>
+              <ActionIcon variant="light" color="red" size="sm" radius="xl" >
+                <IconEye />
+              </ActionIcon>
             </Group>
           </Grid.Col>
         </Grid>
         <Grid align="center" justify="space-around">
-          <Grid.Col span={9}>
+          <Grid.Col span={8}>
             <Group justify="flex-start">
-              <Avatar variant="filled" radius="xl" color="#FA9014">
+              <Avatar variant="filled" radius="xl" color="green">
                 S3
               </Avatar>
               <Text>Diana</Text>
             </Group>
           </Grid.Col>
-          <Grid.Col span={3}>
+          <Grid.Col span={4}>
             <Group>
               <Badge color="green" variant="filled">
                 paid

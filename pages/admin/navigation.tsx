@@ -10,16 +10,23 @@ import {
   IconReceipt2,
   IconSwitchHorizontal,
   IconLogout,
+  IconDashboard,
+  IconHome,
+  IconMoneybag,
+  IconArrowsDownUp,
+  IconArrowsDiagonal,
+  IconZoomMoney,
+  IconReportMoney,
 } from '@tabler/icons-react';
 import MantineLogo from '../../public/logo-white.svg';
 import classes from './Dashboard.module.css';
 import Link from 'next/link';
 
 const data = [
-  { link: './dashboard', label: 'Dashboard', icon: IconBellRinging },
-  { link: './residents', label: 'Residents', icon: IconReceipt2 },
-  { link: './transactions', label: 'Transactions', icon: IconFingerprint },
-  { link: './payments', label: 'Payments', icon: IconKey },
+  { link: './dashboard', label: 'Dashboard', icon: IconDashboard },
+  { link: './residents', label: 'Residents', icon: IconHome },
+  { link: './transactions', label: 'Transactions', icon: IconReportMoney },
+  { link: './payments', label: 'Payments', icon: IconMoneybag },
 //   { link: '', label: 'Databases', icon: IconDatabaseImport },
 //   { link: '', label: 'Authentication', icon: Icon2fa },
 //   { link: '', label: 'Other Settings', icon: IconSettings },
