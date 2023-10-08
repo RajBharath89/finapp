@@ -25,7 +25,7 @@ import classes from "./Login.module.css";
 import Navigation from "./navigation";
 import React, { useState, useEffect } from "react";
 import { IconEdit } from "@tabler/icons-react";
-import { DateInput } from '@mantine/dates';
+// import { DateInput } from '@mantine/dates';
 
 interface PaymentProps {
   name: string;
@@ -136,7 +136,7 @@ function Payments() {
                       />
                     </Grid.Col>
                     <Grid.Col span={3}>
-                    <DateInput clearable defaultValue={new Date()} label="Due Date" placeholder="Date input" />
+                    {/* <DateInput clearable defaultValue={new Date()} label="Due Date" placeholder="Date input" /> */}
                     </Grid.Col>
                     <Grid.Col span={12}>
                       <Input.Wrapper label="Notes" description="" error="">
