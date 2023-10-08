@@ -10,26 +10,81 @@ import {
   Stack,
   Text,
   Title,
-  rem,
 } from "@mantine/core";
-import { Image } from "@mantine/core";
+import { useRouter } from "next/router";
+import React, { useState, useEffect } from "react";
+
 import {
   IconArrowDownLeft,
-  IconArrowDownRight,
   IconArrowUpRight,
-  IconBrandMantine,
   IconCash,
-  IconCashBanknote,
-  IconEye,
-  IconUser,
-  IconUserBolt,
-  IconUsers,
 } from "@tabler/icons-react";
 
-import { useRouter } from 'next/router'
+interface PaymentProps {
+  name: string;
+  house: string;
+  amount: number;
+  duedate: string;
+  notes: string;
+  paymentid: number;
+  paymenttype: string;
+  status: string;
+  resid:any;
+  rows: [];
+}
+
+interface Resident {
+  name: string;
+  house: string;
+  type: string;
+  resid: number;
+  every: any;
+  rows: [];
+}
 
 export default function Dashboard() {
-  const router = useRouter()
+  const router = useRouter();
+
+  const [paymentData, setPaymentData] = useState<PaymentProps[]>([]);
+  const [residentsData, setResidentsData] = useState<Resident[]>([]);
+  const [overallStatus, setOverallStatus] = useState<'paid' | 'pending'>('paid');
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("/api/fetchPaymentsDashboard");
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const result = await response.json();
+        setPaymentData(result.payments.rows);
+
+        const isAllPaid = result.payments.rows.every((row:any) => row.status === 'Paid');
+        setOverallStatus(isAllPaid ? 'paid' : 'pending');
+
+      } catch (error) {
+        console.error("An error occurred while fetching the data: ", error);
+      }
+    };
+
+    const fetchResidents = async () => {
+      try {
+        const response = await fetch("/api/fetchResidents");
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const result = await response.json();
+        setResidentsData(result.residents.rows);
+      } catch (error) {
+        console.error("An error occurred while fetching the data: ", error);
+      }
+    };
+
+    fetchData();
+    fetchResidents();
+  }, []);
+
+  console.log(paymentData)
 
   return (
     <>
@@ -50,7 +105,7 @@ export default function Dashboard() {
             color="yellow"
             size="xs"
             radius="xl"
-            onClick={() => router.push('./transactions')}
+            onClick={() => router.push("./transactions")}
           >
             View Transactions
           </Button>
@@ -61,7 +116,6 @@ export default function Dashboard() {
         <Grid align="center" justify="space-around">
           <Grid.Col span={6}>
             <Group justify="flex-start">
-              {/* <Badge color="green" variant="filled" size="lg">Inwards</Badge> */}
               <ActionIcon
                 variant="filled"
                 color="#A31D14"
@@ -80,9 +134,9 @@ export default function Dashboard() {
             </Group>
           </Grid.Col>
           <Grid.Col span={6}>
-            {/* <Text ta="right"> */}
-              <Title order={4} ta="right">₹ 2400.00</Title>
-            {/* </Text> */}
+            <Title order={4} ta="right">
+              ₹ 2400.00
+            </Title>
           </Grid.Col>
         </Grid>
       </Card>
@@ -91,7 +145,6 @@ export default function Dashboard() {
         <Grid align="center" justify="space-around">
           <Grid.Col span={6}>
             <Group justify="flex-start">
-              {/* <Badge color="green" variant="filled" size="lg">Inwards</Badge> */}
               <ActionIcon
                 variant="filled"
                 color="#A31D14"
@@ -110,130 +163,80 @@ export default function Dashboard() {
             </Group>
           </Grid.Col>
           <Grid.Col span={6}>
-            {/* <Text ta="right"> */}
-              <Title order={4} ta="right">₹ 2230.00</Title>
-            {/* </Text> */}
+            <Title order={4} ta="right">
+              ₹ 2230.00
+            </Title>
           </Grid.Col>
         </Grid>
       </Card>
 
       <Card m={20} shadow="sm" padding="lg" radius="md" withBorder>
         <Text ta="left" c="#A31D14" size="lg" fw={500}>
-          Individual Contribution
+          Pending Contributions
         </Text>
         <Divider mb={10} mt={10} />
         <Stack>
-        <Grid align="center" justify="space-around">
-          <Grid.Col span={7}>
-            <Group justify="flex-start">
-              <Avatar variant="filled" radius="xl" color="green">
-                F1
-              </Avatar>
-              <Text>Raj Bharath</Text>
-            </Group>
-          </Grid.Col>
-          <Grid.Col span={5}>
-            <Group justify="flex-end">
-              <Badge color="green" variant="filled">
-                paid
-              </Badge>
-            </Group>
-          </Grid.Col>
-        </Grid>
-        <Grid align="center" justify="space-around">
-          <Grid.Col span={7}>
-            <Group justify="flex-start">
-              <Avatar variant="filled" radius="xl" color="red">
-                F2
-              </Avatar>
-              <Text>Rajesh Pandey</Text>
-            </Group>
-          </Grid.Col>
-          <Grid.Col span={5} >
-            <Group justify="flex-end">
-              <Badge color="red" variant="filled">
-                pending
-              </Badge>
-              <ActionIcon variant="light" color="red" size="sm" radius="xl" >
-                <IconEye />
-              </ActionIcon>
-            </Group>
-          </Grid.Col>
-        </Grid>
-        <Grid align="center" justify="space-around">
-          <Grid.Col span={7}>
-            <Group justify="flex-start">
-              <Avatar variant="filled" radius="xl" color="green">
-                F1
-              </Avatar>
-              <Text>Boopalan</Text>
-            </Group>
-          </Grid.Col>
-          <Grid.Col span={5}>
-            <Group justify="flex-end">
-              <Badge color="green" variant="filled">
-                paid
-              </Badge>
-            </Group>
-          </Grid.Col>
-        </Grid>
-        <Grid align="center" justify="space-around">
-          <Grid.Col span={7}>
-            <Group justify="flex-start">
-              <Avatar variant="filled" radius="xl" color="green">
-                S1
-              </Avatar>
-              <Text>Pramod Kumar</Text>
-            </Group>
-          </Grid.Col>
-          <Grid.Col span={5}>
-            <Group justify="flex-end">
-              <Badge color="green" variant="filled">
-                paid
-              </Badge>
-            </Group>
-          </Grid.Col>
-        </Grid>
-        <Grid align="center" justify="space-around">
-          <Grid.Col span={7}>
-            <Group justify="flex-start">
-              <Avatar variant="filled" radius="xl" color="red">
-                S2
-              </Avatar>
-              <Text>Ravikumar</Text>
-            </Group>
-          </Grid.Col>
-          <Grid.Col span={5} >
-            <Group justify="flex-end">
-              <Badge color="red" variant="filled">
-                pending
-              </Badge>
-              <ActionIcon variant="light" color="red" size="sm" radius="xl" >
-                <IconEye />
-              </ActionIcon>
-            </Group>
-          </Grid.Col>
-        </Grid>
-        <Grid align="center" justify="space-around">
-          <Grid.Col span={7}>
-            <Group justify="flex-start">
-              <Avatar variant="filled" radius="xl" color="green">
-                S3
-              </Avatar>
-              <Text>Diana</Text>
-            </Group>
-          </Grid.Col>
-          <Grid.Col span={5}>
-            <Group justify="flex-end">
-              <Badge color="green" variant="filled">
-                paid
-              </Badge>
-            </Group>
-          </Grid.Col>
-        </Grid>
+        {paymentData.map((jval: PaymentProps) => (
+          <>
+            {jval.status === "Pending"?
+            <>
+            <Grid align="center" justify="space-around" key={jval.resid}>
+              <Grid.Col span={7}>
+                <Group justify="flex-start">
+                  <Avatar size="28" variant="filled" radius="xl" color="#FA9014">
+                    {jval.house}
+                  </Avatar>
+                  <Text>{jval.name}</Text>
+                </Group>
+              </Grid.Col>
+              <Grid.Col span={5}>
+                <Group justify="flex-end">
+                    <Badge color="red" variant="filled">
+                      {jval.notes}
+                    </Badge>
+                </Group>
+              </Grid.Col>
+            </Grid>
+            
+            </>
+            :
+            <></>
+            }
+          </>
+        ))}
         </Stack>
+
+        {/* <Stack>
+          {residentsData.map((ival: Resident) => (
+            <Grid align="center" justify="space-around" key={ival.resid}>
+              <Grid.Col span={7}>
+                <Group justify="flex-start">
+                  <Avatar size="28" variant="filled" radius="xl" color="#FA9014">
+                    {ival.house}
+                  </Avatar>
+                  <Text>{ival.name}</Text>
+                </Group>
+              </Grid.Col>
+              <Grid.Col span={5}>
+                <Group justify="flex-end">
+                  {paymentData.map((jval: PaymentProps) => (
+                    // Check if the house matches and set the status accordingly
+                    (jval.house === ival.house && (
+                      <Badge
+                        color={jval.status === 'Paid' ? 'green' : 'red'}
+                        variant="filled"
+                        key={jval.paymentid}
+                      >
+                        {jval.status === 'Paid' ? <></> : <>{jval.status}</>}
+                      </Badge>
+                    ))
+                  ))}
+                </Group>
+              </Grid.Col>
+            </Grid>
+          ))}
+        </Stack> */}
       </Card>
-      <Text c="dimmed" fz={13} ta="center" mt={10}>Developed by Pixels2Bots</Text>
     </>
   );
 }

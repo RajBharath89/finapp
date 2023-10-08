@@ -104,7 +104,7 @@
   resolved "https://registry.npmjs.org/@humanwhocodes/object-schema/-/object-schema-1.2.1.tgz"
   integrity sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==
 
-"@mantine/core@7.1.1":
+"@mantine/core@7.1.1", "@mantine/core@7.1.2":
   version "7.1.1"
   resolved "https://registry.npmjs.org/@mantine/core/-/core-7.1.1.tgz"
   integrity sha512-7PBbu/zlL3Uw4HtBVf48fpTy/IFVSJzhMkh3sxG9HQxZot6c5cjuBuTCT+FFY5xicuoYQTu6nkHjZiaz7j12Ug==
@@ -116,7 +116,14 @@
     react-textarea-autosize "8.5.3"
     type-fest "^3.13.1"
 
-"@mantine/hooks@7.1.1":
+"@mantine/dates@^7.1.2":
+  version "7.1.2"
+  resolved "https://registry.npmjs.org/@mantine/dates/-/dates-7.1.2.tgz"
+  integrity sha512-JE0Zf37NPH5Lt5AoHDORoWxiR6J8ozwTCWnh6ozwZNpeH5h/YpssS9mj4JX7hb4WytT5dr1ylOY1Zt5fDRM3+Q==
+  dependencies:
+    clsx "2.0.0"
+
+"@mantine/hooks@7.1.1", "@mantine/hooks@7.1.2":
   version "7.1.1"
   resolved "https://registry.npmjs.org/@mantine/hooks/-/hooks-7.1.1.tgz"
   integrity sha512-k+9NX/YW+pUioH0s2qPmHfGAoSXuNobu1tfT+2eiLMkiQkj3PcErD4K/KJ0MCkR4mGh9PmVcFZbxoYSxgLqRZw==
@@ -541,6 +548,11 @@ damerau-levenshtein@^1.0.8:
   version "1.0.8"
   resolved "https://registry.npmjs.org/damerau-levenshtein/-/damerau-levenshtein-1.0.8.tgz"
   integrity sha512-sdQSFB7+llfUcQHUQO3+B8ERRj0Oa4w9POWMI/puGtuf7gFywGmkaLCElnudfTiKZV+NvHqL0ifzdrI8Ro7ESA==
+
+dayjs@^1.10.5:
+  version "1.11.10"
+  resolved "https://registry.npmjs.org/dayjs/-/dayjs-1.11.10.tgz"
+  integrity sha512-vjAczensTgRcqDERK0SR2XMwsF/tSvnvlv6VcF2GIhg6Sx4yOIt/irsr1RDJsKiIyBzJDpCoXiWWq28MqH2cnQ==
 
 debug@^2.6.9:
   version "2.6.9"
