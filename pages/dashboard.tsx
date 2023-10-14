@@ -112,63 +112,6 @@ export default function Dashboard() {
         </Group>
       </Card>
 
-      {/* <Card m={20} shadow="sm" padding="lg" radius="md" withBorder>
-        <Grid align="center" justify="space-around">
-          <Grid.Col span={6}>
-            <Group justify="flex-start">
-              <ActionIcon
-                variant="filled"
-                color="#A31D14"
-                size="lg"
-                radius="xl"
-                aria-label="Settings"
-              >
-                <IconArrowDownLeft
-                  style={{ width: "60%", height: "60%" }}
-                  stroke={2}
-                />
-              </ActionIcon>
-              <Text ta="left" c="#A31D14" size="lg" fw={500}>
-                Income
-              </Text>
-            </Group>
-          </Grid.Col>
-          <Grid.Col span={6}>
-            <Title order={4} ta="right">
-              ₹ 2400.00
-            </Title>
-          </Grid.Col>
-        </Grid>
-      </Card>
-
-      <Card m={20} shadow="sm" padding="lg" radius="md" withBorder>
-        <Grid align="center" justify="space-around">
-          <Grid.Col span={6}>
-            <Group justify="flex-start">
-              <ActionIcon
-                variant="filled"
-                color="#A31D14"
-                size="lg"
-                radius="xl"
-                aria-label="Settings"
-              >
-                <IconArrowUpRight
-                  style={{ width: "60%", height: "60%" }}
-                  stroke={2}
-                />
-              </ActionIcon>
-              <Text ta="left" c="#A31D14" size="lg" fw={500}>
-                Expenses
-              </Text>
-            </Group>
-          </Grid.Col>
-          <Grid.Col span={6}>
-            <Title order={4} ta="right">
-              ₹ 2230.00
-            </Title>
-          </Grid.Col>
-        </Grid>
-      </Card> */}
 
       <Card m={20} shadow="sm" padding="lg" radius="md" withBorder>
         <Text ta="left" c="#A31D14" size="lg" fw={500}>
@@ -206,37 +149,6 @@ export default function Dashboard() {
           </>
         ))}
         </Stack>
-
-        {/* <Stack>
-          {residentsData.map((ival: Resident) => (
-            <Grid align="center" justify="space-around" key={ival.resid}>
-              <Grid.Col span={7}>
-                <Group justify="flex-start">
-                  <Avatar size="28" variant="filled" radius="xl" color="#FA9014">
-                    {ival.house}
-                  </Avatar>
-                  <Text>{ival.name}</Text>
-                </Group>
-              </Grid.Col>
-              <Grid.Col span={5}>
-                <Group justify="flex-end">
-                  {paymentData.map((jval: PaymentProps) => (
-                    // Check if the house matches and set the status accordingly
-                    (jval.house === ival.house && (
-                      <Badge
-                        color={jval.status === 'Paid' ? 'green' : 'red'}
-                        variant="filled"
-                        key={jval.paymentid}
-                      >
-                        {jval.status === 'Paid' ? <></> : <>{jval.status}</>}
-                      </Badge>
-                    ))
-                  ))}
-                </Group>
-              </Grid.Col>
-            </Grid>
-          ))}
-        </Stack> */}
       </Card>
     </>
   );
