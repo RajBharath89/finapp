@@ -112,7 +112,7 @@ export default function Dashboard() {
         </Group>
       </Card>
 
-      <Card m={20} shadow="sm" padding="lg" radius="md" withBorder>
+      {/* <Card m={20} shadow="sm" padding="lg" radius="md" withBorder>
         <Grid align="center" justify="space-around">
           <Grid.Col span={6}>
             <Group justify="flex-start">
@@ -168,7 +168,7 @@ export default function Dashboard() {
             </Title>
           </Grid.Col>
         </Grid>
-      </Card>
+      </Card> */}
 
       <Card m={20} shadow="sm" padding="lg" radius="md" withBorder>
         <Text ta="left" c="#A31D14" size="lg" fw={500}>

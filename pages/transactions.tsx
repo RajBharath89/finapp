@@ -25,12 +25,46 @@ import {
   IconUserBolt,
   IconUsers,IconArrowLeft,
 } from "@tabler/icons-react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from 'next/router'
 
+interface Txn {
+  txnid: number;
+  txntype: string;
+  house: string;
+  amount: number;
+  payid: number;
+  paydate: any;
+  paymenttype: any;
+  notes: string;
+  rows: [];
+}
 
 export default function Transactions() {
   const router = useRouter()
+  const [txnData, setTxnData] = useState<Txn[]>([]); // Initialize as an empty array
 
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch("/api/fetchTransactions");
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const result = await response.json();
+      setTxnData(result.txn.rows);
+      // console.log(result.residents.rows);
+    } catch (error) {
+      // Handle the error as needed
+      console.error("An error occurred while fetching the data: ", error);
+    }
+  };
+
+  useEffect(() => {   
+    fetchData();
+  }, []);
+
+  console.log(txnData);
 
   return (
     <>
@@ -50,21 +84,47 @@ export default function Transactions() {
         </Text>
         <Divider mb={10} mt={10} />
         <Stack>
+        {txnData.map((ival) => (
+        
+        
+        
         <Grid align="center" justify="space-around">
-          <Grid.Col span={2}>
+          {ival.txntype === "Income" ? 
+          <><Grid.Col span={2}>
               <Avatar variant="filled" radius="xl" color="green">
                 <IconArrowDownLeft/>
               </Avatar>
+          </Grid.Col> 
+          <Grid.Col span={7}>
+              <Text>{ival.paymenttype}</Text>
+              <Text fw={300} fz="13" c="dimmed" >{ival.notes} from {ival.house}</Text>
+          </Grid.Col> 
+          <Grid.Col span={3}>
+            <Text c="green" ta="right">+{ival.amount}</Text>
+          </Grid.Col>
+          </>
+          : 
+          <><Grid.Col span={2}>
+              <Avatar variant="filled" radius="xl" color="red">
+                <IconArrowUpRight/>
+              </Avatar>
           </Grid.Col>
           <Grid.Col span={7}>
-              <Text>Maintenance</Text>
-              <Text fw={300} fz="13" c="dimmed" >Maintenance from F1 on 04/10/2023</Text>
-          </Grid.Col>            
+              <Text>{ival.paymenttype}</Text>
+              <Text fw={300} fz="13" c="dimmed" >{ival.notes}</Text>
+          </Grid.Col> 
           <Grid.Col span={3}>
-            <Text c="green" ta="right">+ ₹400</Text>
+            <Text c="red" ta="right">-{ival.amount}</Text>
           </Grid.Col>
+          </>
+          }
+          
         </Grid>
-        <Grid align="center" justify="space-around">
+
+
+
+        ))}
+        {/* <Grid align="center" justify="space-around">
           <Grid.Col span={2}>
               <Avatar variant="filled" radius="xl" color="red">
                 <IconArrowUpRight/>
@@ -77,7 +137,7 @@ export default function Transactions() {
           <Grid.Col span={3}>
             <Text c="red" ta="right">- ₹2200</Text>
           </Grid.Col>
-        </Grid>
+        </Grid> */}
         
         </Stack>
       </Card>

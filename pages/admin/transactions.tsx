@@ -19,50 +19,87 @@ import Navigation from "./navigation";
 import React, { useState, useEffect } from "react";
 import { IconEdit } from "@tabler/icons-react";
 
-interface Resident {
-  name: string;
+interface Txn {
+  txnid: number;
+  txntype: string;
   house: string;
-  type: string;
-  resid: number;
+  amount: number;
+  payid: number;
+  paydate: any;
+  paymenttype: any;
+  notes: string;
   rows: [];
 }
 
 function Transactions() {
-  const [residentsData, setResidentsData] = useState<Resident[]>([]); // Initialize as an empty array
+  const [txnData, setTxnData] = useState<Txn[]>([]); // Initialize as an empty array
   const API_URL = process.env.POSTGRES_API_URL;
+  const [amount, setAmount] = useState<number>(0);
+  const [notes, setNotes] = useState("");
+  const [paymentType, setPaymentType] = useState("");
+  const [txnType, setTxnType] = useState("");
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch("/api/fetchResidents");
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const result = await response.json();
-        setResidentsData(result.residents.rows);
-        // console.log(result.residents.rows);
-      } catch (error) {
-        // Handle the error as needed
-        console.error("An error occurred while fetching the data: ", error);
+  const fetchData = async () => {
+    try {
+      const response = await fetch("/api/fetchTransactions");
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
-    };
+      const result = await response.json();
+      setTxnData(result.txn.rows);
+      // console.log(result.residents.rows);
+    } catch (error) {
+      // Handle the error as needed
+      console.error("An error occurred while fetching the data: ", error);
+    }
+  };
 
+  useEffect(() => {   
     fetchData();
   }, []);
 
-  console.log(residentsData);
+  console.log(txnData);
 
-  const rows = residentsData.map((ival) => (
-    <Table.Tr key={ival.resid}>
-      <Table.Td>{ival.resid}</Table.Td>
-      <Table.Td>{ival.house}</Table.Td>
-      <Table.Td>{ival.name}</Table.Td>
-      <Table.Td>{ival.type}</Table.Td>
-      <Table.Td>
-        <ActionIcon variant="light" color="orange">
-          <IconEdit size={16} />
-        </ActionIcon>
-      </Table.Td>
+  const handleCreateTransaction = async () => {
+    try {
+      const response = await fetch("/api/createTransaction", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          txnType,
+          notes,
+          amount,
+          paymentType,
+        }),
+      });
+
+      console.log("paymentType", txnType);
+      console.log("notes", notes);
+      console.log("amount", amount);
+
+      if (response.ok) {
+        console.log("Payments created successfully");
+        fetchData();
+      } else {
+        console.error("Failed to create payments");
+      }
+    } catch (error) {
+      console.error("An error occurred while creating payments: ", error);
+    }
+  };
+
+  const rows = txnData.map((ival) => (
+    <Table.Tr key={ival.txnid}>
+      <Table.Td>{ival.txnid}</Table.Td>
+      <Table.Td>{ival.txntype}</Table.Td>
+      <Table.Td>{ival.paydate}</Table.Td>
+      <Table.Td>{ival.payid === null ? <>NA</>:<>{ival.payid}</>}</Table.Td>
+      <Table.Td>{ival.paymenttype === null ? <>NA</>:<>{ival.paymenttype}</>}</Table.Td>
+      <Table.Td>{ival.house === null ? <>NA</>:<>{ival.house}</>}</Table.Td>
+      <Table.Td>{ival.notes}</Table.Td>
+      <Table.Td>{ival.amount}</Table.Td>
     </Table.Tr>
   ));
 
@@ -89,10 +126,19 @@ function Transactions() {
                   <Grid gutter="lg">
                     <Grid.Col span={3}>
                       <Select
+                        label="Transaction Type"
+                        placeholder="Select Transaction Type"
+                        value={txnType}
+                        onChange={(value) => setTxnType(value || "")}
+                        data={["Income", "Expense"]}
+                      />
+                    </Grid.Col>
+                    <Grid.Col span={3}>
+                      <Select
                         label="Payment Type"
                         placeholder="Select Payment Type"
-                        // value={paymentType}
-                        // onChange={(value) => setPaymentType(value || "")}
+                        value={paymentType}
+                        onChange={(value) => setPaymentType(value || "")}
                         data={["Maintenance", "Miscellaneous"]}
                       />
                     </Grid.Col>
@@ -100,17 +146,17 @@ function Transactions() {
                       <NumberInput
                         label="Amount"
                         placeholder="Enter Amount"
-                        // value={amount}
+                        value={amount}
                         prefix="₹ "
                         defaultValue={100}
-                        // onChange={(value) => {
-                        //   if (typeof value === 'number') {
-                        //     setAmount(value);
-                        //   }
-                        // }}
+                        onChange={(value) => {
+                          if (typeof value === 'number') {
+                            setAmount(value);
+                          }
+                        }}
                       />
                     </Grid.Col>
-                    <Grid.Col span={3}>
+                    {/* <Grid.Col span={3}>
                       <MultiSelect
                         label="Assign to Houses"
                         placeholder="Select Assigned Houses"
@@ -121,13 +167,13 @@ function Transactions() {
                         searchable
                         clearable
                       />
-                    </Grid.Col>
+                    </Grid.Col> */}
                     <Grid.Col span={12}>
                       <TextInput
                         label="Notes"
                         placeholder="Enter Notes"
-                        // value={notes}
-                        // onChange={(e) => setNotes(e.currentTarget.value)}
+                        value={notes}
+                        onChange={(e) => setNotes(e.currentTarget.value)}
                       />
                     </Grid.Col>
                     <Grid.Col span={3}>
@@ -135,16 +181,16 @@ function Transactions() {
                         variant="filled"
                         color="#FA9014"
                         radius="xs"
-                        // onClick={handleCreatePayment}
+                        onClick={handleCreateTransaction}
                       >
-                        Create Payment
+                        Create Transaction
                       </Button>
                     </Grid.Col>
                   </Grid>
                 </Card>
             </Grid.Col>
             <Grid.Col>
-              <Text>Transactions: {residentsData.length} Found</Text>
+              <Text>Transactions: {txnData.length} Found</Text>
               <Table
               mt={20}
                 horizontalSpacing="xl"

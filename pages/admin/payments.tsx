@@ -39,6 +39,7 @@ interface PaymentProps {
   notes: string;
   paymentid: number;
   paymenttype: string;
+  txnType:string;
   status: string;
   rows: [];
 }
@@ -46,7 +47,9 @@ interface PaymentProps {
 function Payments() {
   const [paymentData, setPaymentData] = useState<PaymentProps[]>([]); 
   const [paymentType, setPaymentType] = useState("");
+  const [txnType, settxnType] = useState("Income");
   const [notes, setNotes] = useState("");
+  const [house, setHouse] = useState("");
   const [amount, setAmount] = useState<number>(0);
   const [assignedHouses, setAssignedHouses] = useState<string[]>([]);
   const API_URL = process.env.POSTGRES_API_URL;
@@ -102,10 +105,10 @@ function Payments() {
         }),
       });
 
-      console.log("paymentType", paymentType);
-      console.log("notes", notes);
-      console.log("amount", amount);
-      console.log("assignedHouses", assignedHouses);
+      // console.log("paymentType", paymentType);
+      // console.log("notes", notes);
+      // console.log("amount", amount);
+      // console.log("assignedHouses", assignedHouses);
 
       if (response.ok) {
         console.log("Payments created successfully");
@@ -123,6 +126,11 @@ function Payments() {
     );
     if (selectedPay) {
       setEditedStatus(selectedPay.status);
+      settxnType("Income");
+      setNotes(selectedPay.notes);
+      setHouse(selectedPay.house);
+      setAmount(selectedPay.amount);
+      setPaymentType(selectedPay.paymenttype);
     }
     setSelectedPaymentKey(paymentid);
     open();
@@ -170,11 +178,45 @@ function Payments() {
       if (response.ok) {
         fetchData();
         close();
+        handleCreateTransaction();
       } else {
         console.error("Failed to update resident information");
       }
     } catch (error) {
       console.error("An error occurred while updating the resident: ", error);
+    }
+  };
+
+  const handleCreateTransaction = async () => {
+
+    console.log("paymentType", txnType);
+      console.log("notes", notes);
+      console.log("amount", amount);
+    try {
+      const response = await fetch("/api/createTransactionPayments", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          txnType,
+          notes,
+          amount,
+          paymentType,
+          house
+        }),
+      });
+
+      
+
+      if (response.ok) {
+        console.log("Payments created successfully");
+        fetchData();
+      } else {
+        console.error("Failed to create payments");
+      }
+    } catch (error) {
+      console.error("An error occurred while creating payments: ", error);
     }
   };
 
