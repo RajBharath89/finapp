@@ -88,7 +88,7 @@ export default function Transactions() {
         
         
         
-        <Grid align="center" justify="space-around">
+        <Grid align="center" justify="space-around"  key={ival.txnid}>
           {ival.txntype === "Income" ? 
           <><Grid.Col span={2}>
               <Avatar variant="filled" radius="xl" color="green">

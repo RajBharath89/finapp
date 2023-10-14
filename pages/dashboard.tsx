@@ -29,7 +29,7 @@ interface PaymentProps {
   paymentid: number;
   paymenttype: string;
   status: string;
-  resid:any;
+  resid:number;
   rows: [];
 }
 
