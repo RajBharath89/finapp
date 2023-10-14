@@ -12,7 +12,7 @@ import {
   Card,
   GridCol,
   Table,
-  ActionIcon,
+  ActionIcon,Divider, Select,NumberInput, MultiSelect
 } from "@mantine/core";
 import classes from "./Login.module.css";
 import Navigation from "./navigation";
@@ -79,8 +79,72 @@ function Transactions() {
             </Title>
           </div>
           <Grid m={25}>
+
+            <Grid.Col span={12}>
+            <Card withBorder pb={25}>
+                  <Title order={5} mb={15}>
+                    Create New Transaction
+                  </Title>
+                  <Divider mb={15} />
+                  <Grid gutter="lg">
+                    <Grid.Col span={3}>
+                      <Select
+                        label="Payment Type"
+                        placeholder="Select Payment Type"
+                        // value={paymentType}
+                        // onChange={(value) => setPaymentType(value || "")}
+                        data={["Maintenance", "Miscellaneous"]}
+                      />
+                    </Grid.Col>
+                    <Grid.Col span={3}>
+                      <NumberInput
+                        label="Amount"
+                        placeholder="Enter Amount"
+                        // value={amount}
+                        prefix="₹ "
+                        defaultValue={100}
+                        // onChange={(value) => {
+                        //   if (typeof value === 'number') {
+                        //     setAmount(value);
+                        //   }
+                        // }}
+                      />
+                    </Grid.Col>
+                    <Grid.Col span={3}>
+                      <MultiSelect
+                        label="Assign to Houses"
+                        placeholder="Select Assigned Houses"
+                        data={["F1", "F2", "F3", "S1", "S2", "S3"]}
+                        // value={assignedHouses}
+                        // onChange={(value) => setAssignedHouses(value)}
+                        hidePickedOptions
+                        searchable
+                        clearable
+                      />
+                    </Grid.Col>
+                    <Grid.Col span={12}>
+                      <TextInput
+                        label="Notes"
+                        placeholder="Enter Notes"
+                        // value={notes}
+                        // onChange={(e) => setNotes(e.currentTarget.value)}
+                      />
+                    </Grid.Col>
+                    <Grid.Col span={3}>
+                      <Button
+                        variant="filled"
+                        color="#FA9014"
+                        radius="xs"
+                        // onClick={handleCreatePayment}
+                      >
+                        Create Payment
+                      </Button>
+                    </Grid.Col>
+                  </Grid>
+                </Card>
+            </Grid.Col>
             <Grid.Col>
-              <Text>Residents: {residentsData.length} Found</Text>
+              <Text>Transactions: {residentsData.length} Found</Text>
               <Table
               mt={20}
                 horizontalSpacing="xl"
@@ -91,11 +155,15 @@ function Transactions() {
               >
                 <Table.Thead>
                   <Table.Tr>
-                    <Table.Th>ID</Table.Th>
-                    <Table.Th>Flat Name</Table.Th>
-                    <Table.Th>Resident Name</Table.Th>
-                    <Table.Th>Residence Type</Table.Th>
-                    <Table.Th>Actions</Table.Th>
+                    <Table.Th>Tnx ID</Table.Th>
+                    <Table.Th>Tnx Type</Table.Th>
+                    <Table.Th>Date</Table.Th>
+                    <Table.Th>Payment ID</Table.Th>
+                    <Table.Th>Payment Type</Table.Th>
+                    <Table.Th>House</Table.Th>
+                    <Table.Th>Notes</Table.Th>
+                    <Table.Th>Amount</Table.Th>
+                    {/* <Table.Th>Resident Name</Table.Th> */}
                   </Table.Tr>
                 </Table.Thead>
                 <Table.Tbody>{rows}</Table.Tbody>

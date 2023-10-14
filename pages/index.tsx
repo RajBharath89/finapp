@@ -12,7 +12,7 @@ interface Resident {
 }
 
 const IndexPage: React.FC = () => {
-  const [residentsData, setResidentsData] = useState<Resident[]>([]); // Initialize as an empty array
+  const [residentsData, setResidentsData] = useState<Resident[]>([]); 
   const API_URL = process.env.POSTGRES_API_URL;
 
   // console.log(API_URL);
@@ -28,7 +28,6 @@ const IndexPage: React.FC = () => {
         setResidentsData(result.residents.rows);
         console.log(result.residents.rows);
       } catch (error) {
-        // Handle the error as needed
         console.error('An error occurred while fetching the data: ', error);
       }
     };

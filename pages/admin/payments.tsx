@@ -20,18 +20,22 @@ import {
   NumberInput,
   MultiSelect,
   Badge,
+  Group, Modal, Stack
 } from "@mantine/core";
 import classes from "./Login.module.css";
 import Navigation from "./navigation";
 import React, { useState, useEffect } from "react";
-import { IconEdit } from "@tabler/icons-react";
+import { IconEdit, IconTrash } from "@tabler/icons-react";
+import { emit } from "process";
+import { useDisclosure } from "@mantine/hooks";
+
 // import { DateInput } from '@mantine/dates';
 
 interface PaymentProps {
   name: string;
   house: string;
   amount: number;
-  duedate: string;
+  duedate: any;
   notes: string;
   paymentid: number;
   paymenttype: string;
@@ -40,30 +44,143 @@ interface PaymentProps {
 }
 
 function Payments() {
-  const [paymentData, setPaymentData] = useState<PaymentProps[]>([]); // Initialize as an empty array
+  const [paymentData, setPaymentData] = useState<PaymentProps[]>([]); 
   const [paymentType, setPaymentType] = useState("");
+  const [notes, setNotes] = useState("");
+  const [amount, setAmount] = useState<number>(0);
+  const [assignedHouses, setAssignedHouses] = useState<string[]>([]);
   const API_URL = process.env.POSTGRES_API_URL;
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch("/api/fetchPayments");
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const result = await response.json();
-        setPaymentData(result.residents.rows);
-        // console.log(result.residents.rows);
-      } catch (error) {
-        // Handle the error as needed
-        console.error("An error occurred while fetching the data: ", error);
-      }
-    };
+  const [editedStatus, setEditedStatus] = useState("Pending"); 
+  const [opened, { open, close }] = useDisclosure(false);
 
+  const [selectedPaymentKey, setSelectedPaymentKey] = useState<number | null>(
+    null
+  );
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch("/api/fetchPayments");
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const result = await response.json();
+      setPaymentData(result.residents.rows);
+      // console.log(result.residents.rows);
+    } catch (error) {
+      console.error("An error occurred while fetching the data: ", error);
+    }
+  };
+
+  useEffect(() => {
     fetchData();
   }, []);
 
+  // const handleHouseAssign = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   const houseName = event.target.value;
+  //   if (event.target.checked) {
+  //     // Add the house to the list of assigned houses
+  //     setAssignedHouses([...assignedHouses, houseName]);
+  //   } else {
+  //     // Remove the house from the list of assigned houses
+  //     setAssignedHouses(assignedHouses.filter((house) => house !== houseName));
+  //   }
+  // };
+
+  const handleCreatePayment = async () => {
+    try {
+      const response = await fetch("/api/createPayment", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          paymentType,
+          notes,
+          amount,
+          assignedHouses,
+        }),
+      });
+
+      console.log("paymentType", paymentType);
+      console.log("notes", notes);
+      console.log("amount", amount);
+      console.log("assignedHouses", assignedHouses);
+
+      if (response.ok) {
+        console.log("Payments created successfully");
+      } else {
+        console.error("Failed to create payments");
+      }
+    } catch (error) {
+      console.error("An error occurred while creating payments: ", error);
+    }
+  };
+
+  const handleEditClick = (paymentid: number) => {
+    const selectedPay = paymentData.find(
+      (payments) => payments.paymentid === paymentid
+    );
+    if (selectedPay) {
+      setEditedStatus(selectedPay.status);
+    }
+    setSelectedPaymentKey(paymentid);
+    open();
+  };
+
+  const handleDeleteClick = async (paymentid: number) => {
+
+    setSelectedPaymentKey(paymentid);
+
+    try {
+      const response = await fetch(`/api/deletePayment`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: selectedPaymentKey,
+        }),
+      });
+
+      if (response.ok) {
+        fetchData();
+        // close();
+      } else {
+        console.error("Failed to update resident information");
+      }
+    } catch (error) {
+      console.error("An error occurred while updating the resident: ", error);
+    }
+  };
+
+  const handleUpdateClick = async () => {
+    try {
+      const response = await fetch(`/api/updatePayment`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          status: editedStatus,
+          id: selectedPaymentKey,
+        }),
+      });
+
+      if (response.ok) {
+        fetchData();
+        close();
+      } else {
+        console.error("Failed to update resident information");
+      }
+    } catch (error) {
+      console.error("An error occurred while updating the resident: ", error);
+    }
+  };
+
+
   console.log(paymentData);
+  console.log('selectedPaymentKey',selectedPaymentKey);
 
   const rows = paymentData.map((ival) => (
     <Table.Tr key={ival.paymentid}>
@@ -74,15 +191,29 @@ function Payments() {
       <Table.Td>₹{ival.amount}</Table.Td>
       <Table.Td>{ival.duedate}</Table.Td>
       <Table.Td>
-        {ival.status ==="Paid" ? <Badge variant="filled" color={"green"}>{ival.status}</Badge> : <Badge variant="filled" color={"red"}>{ival.status}</Badge>}
-        </Table.Td>
+        {ival.status === "Paid" ? (
+          <Badge variant="filled" color={"green"}>
+            {ival.status}
+          </Badge>
+        ) : (
+          <Badge variant="filled" color={"red"}>
+            {ival.status}
+          </Badge>
+        )}
+      </Table.Td>
       <Table.Td>
-        <ActionIcon variant="light" color="orange">
-          <IconEdit size={16} />
-        </ActionIcon>
+        <Group>
+          <ActionIcon variant="light" color="orange" onClick={() => handleEditClick(ival.paymentid)}>
+            <IconEdit size={16} />
+          </ActionIcon>
+          <ActionIcon variant="light" color="red" onClick={() => handleDeleteClick(ival.paymentid)}>
+            <IconTrash size={16} />
+          </ActionIcon>
+        </Group>
       </Table.Td>
     </Table.Tr>
   ));
+  
 
   return (
     <>
@@ -109,42 +240,53 @@ function Payments() {
                     <Grid.Col span={3}>
                       <Select
                         label="Payment Type"
-                        placeholder="Choose Payment Type"
+                        placeholder="Select Payment Type"
+                        value={paymentType}
+                        onChange={(value) => setPaymentType(value || "")}
                         data={["Maintenance", "Miscellaneous"]}
-                        // value={paymentType} onChange={setPaymentType}
                       />
                     </Grid.Col>
                     <Grid.Col span={3}>
                       <NumberInput
-                        hideControls
                         label="Amount"
                         placeholder="Enter Amount"
+                        value={amount}
                         prefix="₹ "
                         defaultValue={100}
-                        // mb="md"
+                        onChange={(value) => {
+                          if (typeof value === 'number') {
+                            setAmount(value);
+                          }
+                        }}
                       />
                     </Grid.Col>
                     <Grid.Col span={3}>
                       <MultiSelect
-                        label="Assign To"
-                        placeholder="Choose Residents"
+                        label="Assign to Houses"
+                        placeholder="Select Assigned Houses"
                         data={["F1", "F2", "F3", "S1", "S2", "S3"]}
-                        defaultValue={["F1"]}
+                        value={assignedHouses}
+                        onChange={(value) => setAssignedHouses(value)}
                         hidePickedOptions
                         searchable
                         clearable
                       />
                     </Grid.Col>
-                    <Grid.Col span={3}>
-                    {/* <DateInput clearable defaultValue={new Date()} label="Due Date" placeholder="Date input" /> */}
-                    </Grid.Col>
                     <Grid.Col span={12}>
-                      <Input.Wrapper label="Notes" description="" error="">
-                        <Input placeholder="Type notes here..." />
-                      </Input.Wrapper>
+                      <TextInput
+                        label="Notes"
+                        placeholder="Enter Notes"
+                        value={notes}
+                        onChange={(e) => setNotes(e.currentTarget.value)}
+                      />
                     </Grid.Col>
                     <Grid.Col span={3}>
-                      <Button variant="filled" color="#FA9014" radius="xs">
+                      <Button
+                        variant="filled"
+                        color="#FA9014"
+                        radius="xs"
+                        onClick={handleCreatePayment}
+                      >
                         Create Payment
                       </Button>
                     </Grid.Col>
@@ -156,34 +298,52 @@ function Payments() {
                     Payments
                   </Title>
                   <Table
-                  horizontalSpacing="xl"
-                  verticalSpacing="md"
-                  striped
-                  highlightOnHover
-                  withTableBorder
-                >
-                  <Table.Thead>
-                    <Table.Tr>
-                      <Table.Th>PayID</Table.Th>
-                      <Table.Th>Flat</Table.Th>
-                      <Table.Th>Payment Type</Table.Th>
-                      <Table.Th>Notes</Table.Th>
-                      <Table.Th>Amount</Table.Th>
-                      <Table.Th>Date Due</Table.Th>
-                      <Table.Th>Status</Table.Th>
-                      <Table.Th>Actions</Table.Th>
-                    </Table.Tr>
-                  </Table.Thead>
-                  <Table.Tbody>{rows}</Table.Tbody>
-                </Table>
+                    horizontalSpacing="xl"
+                    verticalSpacing="md"
+                    striped
+                    highlightOnHover
+                    withTableBorder
+                  >
+                    <Table.Thead>
+                      <Table.Tr>
+                        <Table.Th>PayID</Table.Th>
+                        <Table.Th>Flat</Table.Th>
+                        <Table.Th>Payment Type</Table.Th>
+                        <Table.Th>Notes</Table.Th>
+                        <Table.Th>Amount</Table.Th>
+                        <Table.Th>Date Due</Table.Th>
+                        <Table.Th>Status</Table.Th>
+                        <Table.Th>Actions</Table.Th>
+                      </Table.Tr>
+                    </Table.Thead>
+                    <Table.Tbody>{rows}</Table.Tbody>
+                  </Table>
                 </Card>
-
-                
               </Grid.Col>
             </Grid>
           </ScrollArea>
         </Grid.Col>
       </Grid>
+
+      <Modal
+        opened={opened}
+        onClose={() => close()}
+        title={`Edit Payment ${selectedPaymentKey} Details`}
+        centered
+      >
+        <Stack>
+          
+          <Select
+            label="Edit Payment Status"
+            value={editedStatus}
+            onChange={(value) => setEditedStatus(value || "")}
+            data={["Paid", "Pending"]}
+          />
+          <Button onClick={handleUpdateClick} variant="filled" color="orange">
+            Update
+          </Button>
+        </Stack>
+      </Modal>
     </>
   );
 }

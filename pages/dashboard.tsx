@@ -191,7 +191,8 @@ export default function Dashboard() {
               </Grid.Col>
               <Grid.Col span={5}>
                 <Group justify="flex-end">
-                    <Badge color="red" variant="filled">
+                <Text>₹ {jval.amount}</Text>
+                <Badge color="red" variant="filled">
                       {jval.notes}
                     </Badge>
                 </Group>

@@ -1,23 +1,18 @@
+import React, { useState, useEffect } from "react";
+import { IconEdit } from "@tabler/icons-react";
+import { useDisclosure } from "@mantine/hooks";
+import { Modal, TextInput, Button, Group, Select } from "@mantine/core";
 import {
   Paper,
-  TextInput,
-  PasswordInput,
-  Checkbox,
-  Button,
-  Image,
   Title,
   Text,
-  Anchor,
   Grid,
-  Card,
-  GridCol,
   Table,
   ActionIcon,
+  Stack,
 } from "@mantine/core";
 import classes from "./Login.module.css";
 import Navigation from "./navigation";
-import React, { useState, useEffect } from "react";
-import { IconEdit } from "@tabler/icons-react";
 
 interface Resident {
   name: string;
@@ -28,29 +23,73 @@ interface Resident {
 }
 
 function Residents() {
-  const [residentsData, setResidentsData] = useState<Resident[]>([]); // Initialize as an empty array
+  const [residentsData, setResidentsData] = useState<Resident[]>([]);
   const API_URL = process.env.POSTGRES_API_URL;
+  const [opened, { open, close }] = useDisclosure(false);
+
+  const [selectedResidentKey, setSelectedResidentKey] = useState<number | null>(
+    null
+  );
+
+  const [editedName, setEditedName] = useState("");
+  const [editedType, setEditedType] = useState("Owner"); 
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch("/api/fetchResidents");
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const result = await response.json();
+      setResidentsData(result.residents.rows);
+    } catch (error) {
+      console.error("An error occurred while fetching the data: ", error);
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch("/api/fetchResidents");
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const result = await response.json();
-        setResidentsData(result.residents.rows);
-        // console.log(result.residents.rows);
-      } catch (error) {
-        // Handle the error as needed
-        console.error("An error occurred while fetching the data: ", error);
-      }
-    };
-
     fetchData();
   }, []);
 
-  console.log(residentsData);
+  const handleEditClick = (resid: number) => {
+    const selectedResident = residentsData.find(
+      (resident) => resident.resid === resid
+    );
+    if (selectedResident) {
+      setEditedName(selectedResident.name);
+      setEditedType(selectedResident.type);
+    }
+    setSelectedResidentKey(resid);
+    open();
+  };
+
+  const handleUpdateClick = async () => {
+    try {
+      const response = await fetch(`/api/updateResident`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: editedName,
+          type: editedType,
+          id: selectedResidentKey,
+        }),
+      });
+
+      if (response.ok) {
+        fetchData();
+        close();
+      } else {
+        console.error("Failed to update resident information");
+      }
+    } catch (error) {
+      console.error("An error occurred while updating the resident: ", error);
+    }
+  };
+
+  console.log(editedName);
+  console.log(editedType);
 
   const rows = residentsData.map((ival) => (
     <Table.Tr key={ival.resid}>
@@ -59,7 +98,11 @@ function Residents() {
       <Table.Td>{ival.name}</Table.Td>
       <Table.Td>{ival.type}</Table.Td>
       <Table.Td>
-        <ActionIcon variant="light" color="orange">
+        <ActionIcon
+          variant="light"
+          color="orange"
+          onClick={() => handleEditClick(ival.resid)}
+        >
           <IconEdit size={16} />
         </ActionIcon>
       </Table.Td>
@@ -82,7 +125,7 @@ function Residents() {
             <Grid.Col>
               <Text>Residents: {residentsData.length} Found</Text>
               <Table
-              mt={20}
+                mt={20}
                 horizontalSpacing="xl"
                 verticalSpacing="md"
                 striped
@@ -104,6 +147,31 @@ function Residents() {
           </Grid>
         </Grid.Col>
       </Grid>
+
+      {/* Modal */}
+      <Modal
+        opened={opened}
+        onClose={() => close()}
+        title={`Edit Resident ${selectedResidentKey} Details`}
+        centered
+      >
+        <Stack>
+          <TextInput
+            label="Edit Resident Name"
+            value={editedName}
+            onChange={(event) => setEditedName(event.currentTarget.value)}
+          />
+          <Select
+            label="Edit Resident type"
+            value={editedType}
+            onChange={(value) => setEditedType(value || "")}
+            data={["Owner", "Tenant"]}
+          />
+          <Button onClick={handleUpdateClick} variant="filled" color="orange">
+            Update
+          </Button>
+        </Stack>
+      </Modal>
     </>
   );
 }
