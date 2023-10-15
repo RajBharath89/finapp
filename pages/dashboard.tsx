@@ -42,11 +42,27 @@ interface Resident {
   rows: [];
 }
 
+interface Balance {
+  total_balance: {
+    income: number;
+    expense: number;
+  };
+  maint_balance: {
+    income: number;
+    expense: number;
+  };
+  misc_balance: {
+    income: number;
+    expense: number;
+  };
+}
+
 export default function Dashboard() {
   const router = useRouter();
 
   const [paymentData, setPaymentData] = useState<PaymentProps[]>([]);
   const [residentsData, setResidentsData] = useState<Resident[]>([]);
+  // const [balanceData, setBalanceData] = useState<Balance[]>([]);
   const [overallStatus, setOverallStatus] = useState<'paid' | 'pending'>('paid');
 
   useEffect(() => {
@@ -80,10 +96,26 @@ export default function Dashboard() {
       }
     };
 
+    const fetchBalance = async () => {
+      try {
+        const response = await fetch("/api/fetchBalance");
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const result = await response.json();
+        // console.log(result.data.rows[0].data);
+        // setBalanceData(result.data.rows[0].data);
+      } catch (error) {
+        console.error("An error occurred while fetching the data: ", error);
+      }
+    };
+    
     fetchData();
     fetchResidents();
+    fetchBalance();
   }, []);
-
+  
+  // console.log("Balance Data",balanceData)
   console.log(paymentData)
 
   return (
@@ -93,10 +125,10 @@ export default function Dashboard() {
           {" "}
           <IconCash size="60" stroke={1} />
           <br />
-          Account Balance
+          Total Account Balance
         </Text>
         <Title ta="center" c="white" order={1}>
-          ₹ 620.00
+          ₹ 6021.00
         </Title>
         <Group justify="center">
           <Button
@@ -110,6 +142,30 @@ export default function Dashboard() {
             View Transactions
           </Button>
         </Group>
+      </Card>
+
+      <Card m={20} bg="#A31D14" shadow="sm" padding="lg" radius="md" withBorder>
+        <Text ta="center" c="white" size="lg" fw={400}>
+          
+          <IconCash size="26" stroke={1} />
+          <br />
+          Maintenance Balance
+        </Text>
+        <Title ta="center" c="white" order={5}>
+          ₹ 1020.00
+        </Title>
+      </Card>
+
+      <Card m={20} bg="#A31D14" shadow="sm" padding="lg" radius="md" withBorder>
+        <Text ta="center" c="white" size="lg" fw={400}>
+          
+          <IconCash size="26" stroke={1} />
+          <br />
+          Miscellaneous Balance
+        </Text>
+        <Title ta="center" c="white" order={5}>
+          ₹ 5001.00
+        </Title>
       </Card>
 
 
