@@ -68,80 +68,82 @@ export default function Dashboard() {
   const [balanceData, setBalanceData] = useState<balanceData | undefined>();
   const [overallStatus, setOverallStatus] = useState<'paid' | 'pending'>('paid');
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch("/api/fetchPaymentsDashboard");
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const result = await response.json();
-        setPaymentData(result.payments.rows);
-
-        const isAllPaid = result.payments.rows.every((row:any) => row.status === 'Paid');
-        setOverallStatus(isAllPaid ? 'paid' : 'pending');
-
-      } catch (error) {
-        console.error("An error occurred while fetching the data: ", error);
-      }
-    };
-
-    const fetchResidents = async () => {
-      try {
-        const response = await fetch("/api/fetchResidents");
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const result = await response.json();
-        setResidentsData(result.residents.rows);
-      } catch (error) {
-        console.error("An error occurred while fetching the data: ", error);
-      }
-    };
-
-    
-
-    const fetchBalance = async () => {
-      try {
-        const response = await fetch("/api/fetchBalance");
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const result = await response.json();
-    
-        console.log("Fetched data:", result.data.rows[0].data); // Log the fetched data
-    
-        setBalanceData(result.data.rows[0].data);
-    
-        // Call handleBalance after updating the state
-        
-        if (balanceData) {
-          const mt_balance = (balanceData && balanceData.mt_income) - (balanceData && balanceData.mt_expense);
-          setmtbalance(mt_balance);
-          console.log("MT Balance:",mt_balance)
-          {balanceData.ms_expense === null ? <>0</> : <>{balanceData.ms_expense}</>}
-          const ms_balance = (balanceData && balanceData.ms_income) - (balanceData && balanceData.ms_expense);
-          setmsbalance(ms_balance);
-          console.log("MS Balance:",ms_balance)
-          const tot_balance = (balanceData && balanceData.tot_income) - (balanceData && balanceData.tot_expense);
-          settotbalance(tot_balance);
-          console.log("Tot Balance:",tot_balance)
-        } else {
-          // console.log("Total Balance:",tot_balance)
-    
-          // Handle the case where balanceData is undefined
-        }
-        console.log("Fetched data:", result); // Log the fetched data
-
-
-      } catch (error) {
-        console.error("An error occurred while fetching the data: ", error);
-      }
-    };
+  
+  
+  useEffect(() => {       
+    fetchBalance();
     fetchData();
     fetchResidents();
-    fetchBalance();
   }, []);
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch("/api/fetchPaymentsDashboard");
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const result = await response.json();
+      setPaymentData(result.payments.rows);
+
+      const isAllPaid = result.payments.rows.every((row:any) => row.status === 'Paid');
+      setOverallStatus(isAllPaid ? 'paid' : 'pending');
+
+    } catch (error) {
+      console.error("An error occurred while fetching the data: ", error);
+    }
+  };
+
+  const fetchResidents = async () => {
+    try {
+      const response = await fetch("/api/fetchResidents");
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const result = await response.json();
+      setResidentsData(result.residents.rows);
+    } catch (error) {
+      console.error("An error occurred while fetching the data: ", error);
+    }
+  };
+
+  const fetchBalance = async () => {
+    try {
+      const response = await fetch("/api/fetchBalance");
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const result = await response.json();
+  
+      console.log("Fetched data:", result.data.rows[0].data); // Log the fetched data
+  
+      // setBalanceData(result.data.rows[0].data);
+  
+      // Call handleBalance after updating the state
+      
+      if (result.data.rows[0].data) {
+        const mt_balance = (result.data.rows[0].data && result.data.rows[0].data.mt_income) - (result.data.rows[0].data && result.data.rows[0].data.mt_expense);
+        setmtbalance(mt_balance);
+        console.log("MT Balance:",mt_balance)
+        {result.data.rows[0].data.ms_expense === null ? <>0</> : <>{result.data.rows[0].data.ms_expense}</>}
+        const ms_balance = (result.data.rows[0].data && result.data.rows[0].data.ms_income) - (result.data.rows[0].data && result.data.rows[0].data.ms_expense);
+        setmsbalance(ms_balance);
+        console.log("MS Balance:",ms_balance)
+        const tot_balance = (result.data.rows[0].data && result.data.rows[0].data.tot_income) - (result.data.rows[0].data && result.data.rows[0].data.tot_expense);
+        settotbalance(tot_balance);
+        console.log("Tot Balance:",tot_balance)
+      } else {
+        // console.log("Total Balance:",tot_balance)  
+        // Handle the case where balanceData is undefined
+      }
+      // console.log("Fetched data:", result); // Log the fetched data
+
+
+    } catch (error) {
+      console.error("An error occurred while fetching the data: ", error);
+    }
+  };
+
+  
 
   
 
