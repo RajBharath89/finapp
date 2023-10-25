@@ -42,19 +42,19 @@ interface Resident {
   rows: [];
 }
 
-interface Balance {
-  total_balance: {
-    income: number;
-    expense: number;
-  };
-  maint_balance: {
-    income: number;
-    expense: number;
-  };
-  misc_balance: {
-    income: number;
-    expense: number;
-  };
+// interface Balance {
+//   total_balance: string;
+//   maint_balance:string;
+//   misc_balance:string;
+// }
+
+interface balanceData {
+    tot_income: number;
+    tot_expense: number;
+    mt_income: number;
+    mt_expense: number;
+    ms_income: number;
+    ms_expense: number;
 }
 
 export default function Dashboard() {
@@ -62,7 +62,10 @@ export default function Dashboard() {
 
   const [paymentData, setPaymentData] = useState<PaymentProps[]>([]);
   const [residentsData, setResidentsData] = useState<Resident[]>([]);
-  // const [balanceData, setBalanceData] = useState<Balance[]>([]);
+  const [mtbalance, setmtbalance] = useState<number>();
+  const [msbalance, setmsbalance] = useState<number>();
+  const [totbalance, settotbalance] = useState<number>();
+  const [balanceData, setBalanceData] = useState<balanceData | undefined>();
   const [overallStatus, setOverallStatus] = useState<'paid' | 'pending'>('paid');
 
   useEffect(() => {
@@ -96,6 +99,8 @@ export default function Dashboard() {
       }
     };
 
+    
+
     const fetchBalance = async () => {
       try {
         const response = await fetch("/api/fetchBalance");
@@ -103,32 +108,57 @@ export default function Dashboard() {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const result = await response.json();
-        // console.log(result.data.rows[0].data);
-        // setBalanceData(result.data.rows[0].data);
+    
+        console.log("Fetched data:", result.data.rows[0].data); // Log the fetched data
+    
+        setBalanceData(result.data.rows[0].data);
+    
+        // Call handleBalance after updating the state
+        
+        if (balanceData) {
+          const mt_balance = (balanceData && balanceData.mt_income) - (balanceData && balanceData.mt_expense);
+          setmtbalance(mt_balance);
+          console.log("MT Balance:",mt_balance)
+          {balanceData.ms_expense === null ? <>0</> : <>{balanceData.ms_expense}</>}
+          const ms_balance = (balanceData && balanceData.ms_income) - (balanceData && balanceData.ms_expense);
+          setmsbalance(ms_balance);
+          console.log("MS Balance:",ms_balance)
+          const tot_balance = (balanceData && balanceData.tot_income) - (balanceData && balanceData.tot_expense);
+          settotbalance(tot_balance);
+          console.log("Tot Balance:",tot_balance)
+        } else {
+          // console.log("Total Balance:",tot_balance)
+    
+          // Handle the case where balanceData is undefined
+        }
+        console.log("Fetched data:", result); // Log the fetched data
+
+
       } catch (error) {
         console.error("An error occurred while fetching the data: ", error);
       }
     };
-    
     fetchData();
     fetchResidents();
     fetchBalance();
   }, []);
-  
-  // console.log("Balance Data",balanceData)
-  console.log(paymentData)
 
+  
+
+  // console.log(mtbalance)
+  // console.log(msbalance)
+  // console.log(totbalance)
+  
   return (
     <>
       <Card m={20} bg="#A31D14" shadow="sm" padding="lg" radius="md" withBorder>
         <Text ta="center" c="white" size="lg" fw={400}>
-          {" "}
           <IconCash size="60" stroke={1} />
           <br />
           Total Account Balance
         </Text>
         <Title ta="center" c="white" order={1}>
-          ₹ 6021.00
+          ₹ {totbalance}
         </Title>
         <Group justify="center">
           <Button
@@ -152,7 +182,7 @@ export default function Dashboard() {
           Maintenance Balance
         </Text>
         <Title ta="center" c="white" order={5}>
-          ₹ 1020.00
+          ₹ {mtbalance}
         </Title>
       </Card>
 
@@ -164,7 +194,7 @@ export default function Dashboard() {
           Miscellaneous Balance
         </Text>
         <Title ta="center" c="white" order={5}>
-          ₹ 5001.00
+          ₹ {msbalance}
         </Title>
       </Card>
 
@@ -174,12 +204,13 @@ export default function Dashboard() {
           Pending Contributions
         </Text>
         <Divider mb={10} mt={10} />
-        <Stack>
+        
         {paymentData.map((jval: PaymentProps) => (
           <>
-            {jval.status === "Pending"?
+            
+            {jval.status === "Pending" ?
             <>
-            <Grid align="center" justify="space-around" key={jval.resid}>
+            <Grid align="center" justify="space-around" key={jval.paymentid} >
               <Grid.Col span={7}>
                 <Group justify="flex-start">
                   <Avatar size="28" variant="filled" radius="xl" color="#FA9014">
@@ -204,7 +235,6 @@ export default function Dashboard() {
             }
           </>
         ))}
-        </Stack>
       </Card>
     </>
   );

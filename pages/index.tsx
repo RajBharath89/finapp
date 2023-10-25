@@ -8,6 +8,7 @@ interface Resident {
   name: string;
   house: string;
   type: string;
+  resid:string;
   rows: [];
 }
 
@@ -50,7 +51,7 @@ const IndexPage: React.FC = () => {
           </Popover.Target>
           <Popover.Dropdown>
             {residentsData.map((ival: Resident) => (
-              <Group justify="flex-start" mb={15} key={ival.name}>
+              <Group justify="flex-start" mb={15} key={ival.resid}>
                 <Avatar size="28" variant="filled" radius="xl" color="#FA9014">{ival.house}</Avatar>
                 <Text ta="left">{ival.name}</Text>
                 <Badge ta="right" color="#A31D14" variant="light">{ival.type}</Badge>

@@ -7,42 +7,37 @@ export default async function handler(
 ) {
   try {
     const data = await sql`SELECT json_build_object(
-      'total_balance', json_build_object(
-          'income', (
+      
+          'tot_income', (
               SELECT SUM(Amount)
               FROM Transactions
               WHERE Txntype = 'Income'
           ),
-          'expense', (
+          'tot_expense', (
               SELECT SUM(Amount)
               FROM Transactions
               WHERE Txntype = 'Expense'
-          )
-      ),
-      'maint_balance', json_build_object(
-          'income', (
+          ),      
+          'mt_income', (
               SELECT SUM(Amount)
               FROM Transactions
               WHERE Txntype = 'Income' AND Paymenttype = 'Maintenance'
           ),
-          'expense', (
+          'mt_expense', (
               SELECT SUM(Amount)
               FROM Transactions
               WHERE Txntype = 'Expense' AND Paymenttype = 'Maintenance'
-          )
-      ),
-      'misc_balance', json_build_object(
-          'income', (
+          ),      
+          'ms_income', (
               SELECT SUM(Amount)
               FROM Transactions
               WHERE Txntype = 'Income' AND Paymenttype = 'Miscellaneous'
           ),
-          'expense', (
+          'ms_expense', (
               SELECT SUM(Amount)
               FROM Transactions
               WHERE Txntype = 'Expense' AND Paymenttype = 'Miscellaneous'
           )
-      )
   ) AS data`;
   return response.status(200).json({ data });
   } catch (error) {
