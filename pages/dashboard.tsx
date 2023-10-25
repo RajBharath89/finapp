@@ -142,14 +142,6 @@ export default function Dashboard() {
       console.error("An error occurred while fetching the data: ", error);
     }
   };
-
-  
-
-  
-
-  // console.log(mtbalance)
-  // console.log(msbalance)
-  // console.log(totbalance)
   
   return (
     <>
