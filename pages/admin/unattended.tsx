@@ -44,7 +44,7 @@ interface PaymentProps {
   rows: [];
 }
 
-function Payments() {
+function Unattended() {
   const [paymentData, setPaymentData] = useState<PaymentProps[]>([]); 
   const [paymentType, setPaymentType] = useState("");
   const [txnType, settxnType] = useState("Income");
@@ -389,4 +389,4 @@ function Payments() {
     </>
   );
 }
-export default Payments;
+export default Unattended;
